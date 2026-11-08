@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simpleng Counter</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+        button { font-size: 20px; padding: 15px 30px; cursor: pointer; border-radius: 8px; background: #007bff; color: white; border: none; }
+        .box { margin-top: 30px; }
+        h1 { font-size: 60px; color: #007bff; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <h2>Pagsusulit: 1 + 1 = ?</h2>
+    
+    <!-- Phone 1: Pindutin ito para mag-submit -->
+    <button onclick="submitAnswer()">I-submit ang Sagot</button>
+
+    <!-- Phone 2: Makikita kung ilan na ang nag-respond -->
+    <div class="box">
+        <h3>Total na Nag-respond:</h3>
+        <h1 id="count">0</h1>
+    </div>
+
+    <script>
+        // PALITAN ANG 'my-quiz-unique-key-123' NG KAHIT ANONG UNIKONG PANGALAN
+        const key = "my-quiz-unique-key-123"; 
+        const namespace = "github-pages-demo";
+
+        // 1. Kunin ang kasalukuyang bilang
+        function updateCount() {
+            fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("count").innerText = data.value || 0;
+                });
+        }
+
+        // 2. Kapag nag-click sa Phone 1, dagdagan ng +1 ang count sa server
+        function submitAnswer() {
+            fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("count").innerText = data.value;
+                    alert("Naipadala na!");
+                });
+        }
+
+        // Mag-check ng bagong count kada 2 segundo para sa ibang phone
+        setInterval(updateCount, 2000);
+        updateCount();
+    </script>
+
+</body>
+</html>
